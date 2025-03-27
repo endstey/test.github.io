@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MobileHub - Обзоры смартфонов</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #9c27b0;
+            --secondary: #e91e63;
+            --accent: #ff4081;
+            --light-pink: #fce4ec;
+            --light-purple: #f3e5f5;
+            --dark: #4a148c;
+            --text: #333;
+            --rating: #ffc107;
+            --price: #4caf50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--light-pink), var(--light-purple));
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            margin-bottom: 3rem;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+        }
+        
+        .search-container {
+            margin: 2rem auto;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        #search {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding-left: 55px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+        }
+        
+        #search:focus {
+            outline: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .phone-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .phone-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .phone-image {
+            height: 220px;
+            background: linear-gradient(45deg, #f3e5f5, #e1bee7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .phone-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .phone-image img {
+            max-width: 80%;
+            max-height: 80%;
+            transition: transform 0.5s ease;
+        }
+        
+        .phone-brand {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+        
+        .phone-price {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: var(--price);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+        
+        .phone-content {
+            padding: 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .phone-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .phone-features {
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+        }
+        
+        .phone-features li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+            line-height: 1.4;
+        }
+        
+        .phone-features li:before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .phone-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .stars {
+            color: var(--rating);
+            margin-right: 8px;
+        }
+        
+        .rating-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .phone-links {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .footer-description {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 2rem 0;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            header {
+                padding: 2rem 0;
+                clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+            }
+            
+            .phone-card {
+                max-width: 100%;
+            }
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .phone-card {
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .phone-card:nth-child(1) { animation-delay: 0.1s; }
+        .phone-card:nth-child(2) { animation-delay: 0.2s; }
+        .phone-card:nth-child(3) { animation-delay: 0.3s; }
+        .phone-card:nth-child(4) { animation-delay: 0.4s; }
+        .phone-card:nth-child(5) { animation-delay: 0.5s; }
+        .phone-card:nth-child(6) { animation-delay: 0.6s; }
+        .phone-card:nth-child(7) { animation-delay: 0.7s; }
+        .phone-card:nth-child(8) { animation-delay: 0.8s; }
+        .phone-card:nth-child(9) { animation-delay: 0.9s; }
+        .phone-card:nth-child(10) { animation-delay: 1s; }
+        .phone-card:nth-child(11) { animation-delay: 1.1s; }
+        .phone-card:nth-child(12) { animation-delay: 1.2s; }
+        .phone-card:nth-child(13) { animation-delay: 1.3s; }
+        .phone-card:nth-child(14) { animation-delay: 1.4s; }
+        .phone-card:nth-child(15) { animation-delay: 1.5s; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>MobileHub</h1>
+            <p class="tagline">Лучшие смартфоны 2023 года с подробными обзорами и сравнениями</p>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search" placeholder="Найти смартфон...">
+            </div>
+        </div>
+    </header>
+    
+    <div class="container" id="phones-container">
+        <!-- Карточки будут добавлены через JavaScript -->
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">MobileHub</div>
+            <p class="footer-description">Самые свежие обзоры смартфонов, сравнения характеристик и рекомендации по выбору</p>
+            
+            <div class="social-links">
+                <a href="https://github.com" aria-label="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://youtube.com" aria-label="YouTube" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://telegram.org" aria-label="Telegram" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="https://twitter.com" aria-label="Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p class="copyright">© 2023 MobileHub. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Данные о смартфонах с актуальными ценами и изображениями с Яндекс.Маркета
+        const phones = [
+            {
+                brand: "Xiaomi",
+                model: "14T Pro",
+                price: "64 990 ₽",
+                features: [
+                    "Экран: 6.67\" AMOLED, 144 Гц",
+                    "Процессор: Dimensity 9200+",
+                    "Камера: 200 МП + 8 МП + 2 МП",
+                    "Батарея: 5000 мАч, 120 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.8,
+                marketUrl: "https://market.yandex.ru/product--14t-pro/689461266?sku=103579298241&uniqueId=62878861&do-waremd5=QHEEPrjlifXiQi5ZbFOB7g",
+                reviewUrl: "https://www.youtube.com/watch?v=hr1HwidiLSo",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id5573270470790919311.jpeg/600x800"
+            },
+            {
+                brand: "Xiaomi",
+                model: "Redmi Note 13 Pro",
+                price: "39 990 ₽",
+                features: [
+                    "Экран: 6.67\" AMOLED, 120 Гц",
+                    "Процессор: Snapdragon 7s Gen 2",
+                    "Камера: 200 МП + 8 МП + 2 МП",
+                    "Батарея: 5100 мАч, 67 Вт",
+                    "Память: 8/256 ГБ"
+                ],
+                rating: 4.5,
+                marketUrl: "https://market.yandex.ru/product--redmi-note-13-pro-5g/15341769?sku=103248284021&uniqueId=182189685&do-waremd5=VvmLgbUamWiqTMLa4lAOkQ",
+                reviewUrl: "https://www.youtube.com/watch?v=aAhIzWMuD7g",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id9163316031976064111.jpeg/600x800"
+            },
+            {
+                brand: "Xiaomi",
+                model: "12X",
+                price: "49 990 ₽",
+                features: [
+                    "Экран: 6.28\" AMOLED, 120 Гц",
+                    "Процессор: Snapdragon 870",
+                    "Камера: 50 МП + 13 МП + 5 МП",
+                    "Батарея: 4500 мАч, 67 Вт",
+                    "Память: 8/256 ГБ"
+                ],
+                rating: 4.6,
+                marketUrl: "https://market.yandex.ru/product--xiaomi-12x-8-256-gb-cn-dual-nano-sim-sinii/266710647?sku=103223732340&uniqueId=921284&do-waremd5=w8AxCcdh91G-mAF5odvDnA",
+                reviewUrl: "https://www.youtube.com/watch?v=h8tQYp9MHF8",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id6845380370303001966.jpeg/600x800"
+            },
+            {
+                brand: "POCO",
+                model: "F6 Pro",
+                price: "59 990 ₽",
+                features: [
+                    "Экран: 6.67\" AMOLED, 120 Гц",
+                    "Процессор: Snapdragon 8+ Gen 1",
+                    "Камера: 64 МП + 8 МП + 2 МП",
+                    "Батарея: 5000 мАч, 67 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.7,
+                marketUrl: "https://market.yandex.ru/product--poco-f6-pro/124266483?sku=103551165813&uniqueId=750154&do-waremd5=73RGoKY9IrsX1OsZImzJKA",
+                reviewUrl: "https://www.youtube.com/watch?v=Z9C7y9rPKAM",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id9163316031976064111.jpeg/600x800"
+            },
+            {
+                brand: "Samsung",
+                model: "Galaxy S25 Plus 5G",
+                price: "89 990 ₽",
+                features: [
+                    "Экран: 6.6\" Dynamic AMOLED 2X, 120 Гц",
+                    "Процессор: Exynos 2400",
+                    "Камера: 50 МП + 12 МП + 10 МП",
+                    "Батарея: 4700 мАч, 45 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.9,
+                marketUrl: "https://market.yandex.ru/product--galaxy-s25/939398372?sku=103718888952&uniqueId=62878861&do-waremd5=7y6MqUi99K7B3EJ13jKoxA",
+                reviewUrl: "https://www.youtube.com/watch?v=T2iKAIyxN64",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id6845380370303001966.jpeg/600x800"
+            },
+            {
+                brand: "Oppo",
+                model: "Reno 12 Pro",
+                price: "69 990 ₽",
+                features: [
+                    "Экран: 6.7\" AMOLED, 120 Гц",
+                    "Процессор: Dimensity 9200",
+                    "Камера: 50 МП + 50 МП + 13 МП",
+                    "Батарея: 4600 мАч, 80 Вт",
+                    "Память: 12/512 ГБ"
+                ],
+                rating: 4.6,
+                marketUrl: "https://market.yandex.ru/product--smartfon-oppo-reno-12-pro-12-512gb-space-brown-korichnevyi-global-2sim/865207987?sku=103642422078&uniqueId=119485579&do-waremd5=FpF15o4VQcoRIT8KR89b0w",
+                reviewUrl: "https://www.youtube.com/watch?v=fSJmCGzHDRg",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id5573270470790919311.jpeg/600x800"
+            },
+            {
+                brand: "Samsung",
+                model: "Galaxy S24 FE",
+                price: "59 990 ₽",
+                features: [
+                    "Экран: 6.4\" Dynamic AMOLED, 120 Гц",
+                    "Процессор: Exynos 2200",
+                    "Камера: 50 МП + 12 МП + 8 МП",
+                    "Батарея: 4500 мАч, 25 Вт",
+                    "Память: 8/256 ГБ"
+                ],
+                rating: 4.5,
+                marketUrl: "https://market.yandex.ru/product--galaxy-s24-fe/702969125?sku=103552368225&uniqueId=147021296&do-waremd5=25Fd_rFOmNHlICyFuxv0BQ",
+                reviewUrl: "https://www.youtube.com/watch?v=x0_fdeUOmWI",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id9163316031976064111.jpeg/600x800"
+            },
+            {
+                brand: "POCO",
+                model: "X7 Pro",
+                price: "34 990 ₽",
+                features: [
+                    "Экран: 6.67\" AMOLED, 120 Гц",
+                    "Процессор: Snapdragon 860",
+                    "Камера: 64 МП + 8 МП + 2 МП + 2 МП",
+                    "Батарея: 4520 мАч, 33 Вт",
+                    "Память: 8/256 ГБ"
+                ],
+                rating: 4.4,
+                marketUrl: "https://market.yandex.ru/product--poco-x7-pro/945994464?sku=103732010034&uniqueId=16870397&do-waremd5=IhwVdR8VGXPP7FalJjIulg",
+                reviewUrl: "https://www.youtube.com/watch?v=uUKkxYUJ4xE",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id6845380370303001966.jpeg/600x800"
+            },
+            {
+                brand: "ASUS",
+                model: "Zenfone 10",
+                price: "79 990 ₽",
+                features: [
+                    "Экран: 5.9\" AMOLED, 144 Гц",
+                    "Процессор: Snapdragon 8 Gen 2",
+                    "Камера: 50 МП + 13 МП",
+                    "Батарея: 4300 мАч, 30 Вт",
+                    "Память: 16/512 ГБ"
+                ],
+                rating: 4.7,
+                marketUrl: "https://market.yandex.ru/product--zenfone-10/1896699935?sku=102095089041&uniqueId=118779342&do-waremd5=FRrFNGoyuQKkxqn6d7OrMw",
+                reviewUrl: "https://www.youtube.com/watch?v=flSHNGJK8UE",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id5573270470790919311.jpeg/600x800"
+            },
+            {
+                brand: "Huawei",
+                model: "P60 Pro",
+                price: "89 990 ₽",
+                features: [
+                    "Экран: 6.67\" OLED, 120 Гц",
+                    "Процессор: Snapdragon 8+ Gen 1",
+                    "Камера: 48 МП + 48 МП + 13 МП",
+                    "Батарея: 4815 мАч, 88 Вт",
+                    "Память: 8/256 ГБ"
+                ],
+                rating: 4.5,
+                marketUrl: "https://market.yandex.ru/product--smartfon-huawei-p60-pro-8-256gb-lte-dual-sim-rococo-pearl/1824710490",
+                reviewUrl: "https://www.youtube.com/watch?v=_Np3LzwMHfk",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id9163316031976064111.jpeg/600x800"
+            },
+            {
+                brand: "Realme",
+                model: "GT 7 Pro",
+                price: "54 990 ₽",
+                features: [
+                    "Экран: 6.7\" AMOLED, 144 Гц",
+                    "Процессор: Snapdragon 8 Gen 2",
+                    "Камера: 50 МП + 8 МП + 2 МП",
+                    "Батарея: 4600 мАч, 240 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.6,
+                marketUrl: "https://market.yandex.ru/product--gt-7-pro/846960931?sku=103626946678&uniqueId=43149540&do-waremd5=BJSOAREWs6YN-5SgiRXKVg",
+                reviewUrl: "https://www.youtube.com/watch?v=iz3y4qFZLOA",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id6845380370303001966.jpeg/600x800"
+            },
+            {
+                brand: "Sony",
+                model: "Xperia 5 V",
+                price: "89 990 ₽",
+                features: [
+                    "Экран: 6.1\" OLED, 120 Гц",
+                    "Процессор: Snapdragon 8 Gen 2",
+                    "Камера: 52 МП + 12 МП",
+                    "Батарея: 5000 мАч, 30 Вт",
+                    "Память: 8/256 ГБ"
+                ],
+                rating: 4.4,
+                marketUrl: "https://market.yandex.ru/product--xperia-5-v/1928742512?sku=102383000160&uniqueId=708310&do-waremd5=JGrrFvI_zeIo5hFxCfXbOg",
+                reviewUrl: "https://www.youtube.com/watch?v=QNn04a0_kL8",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id5573270470790919311.jpeg/600x800"
+            },
+            {
+                brand: "Sony",
+                model: "Xperia 1 V",
+                price: "109 990 ₽",
+                features: [
+                    "Экран: 6.5\" 4K OLED, 120 Гц",
+                    "Процессор: Snapdragon 8 Gen 2",
+                    "Камера: 52 МП + 12 МП + 12 МП",
+                    "Батарея: 5000 мАч, 30 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.7,
+                marketUrl: "https://www.ozon.ru/product/sony-smartfon-xperia-1-v-global-12-256-gb-chernyy-1867686059/",
+                reviewUrl: "https://www.youtube.com/watch?v=NhmncCdpVO0",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id9163316031976064111.jpeg/600x800"
+            },
+            {
+                brand: "Sony",
+                model: "Xperia 1 IV",
+                price: "99 990 ₽",
+                features: [
+                    "Экран: 6.5\" 4K OLED, 120 Гц",
+                    "Процессор: Snapdragon 8 Gen 1",
+                    "Камера: 12 МП + 12 МП + 12 МП",
+                    "Батарея: 5000 мАч, 30 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.3,
+                marketUrl: "https://market.yandex.ru/product--xperia-1-iv/1753676593?sku=101757986052&uniqueId=182574207&do-waremd5=ESNKUCVcyf3aunqcwqT64Q",
+                reviewUrl: "https://www.youtube.com/watch?v=Sd8hpYCKHCA",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id6845380370303001966.jpeg/600x800"
+            },
+            {
+                brand: "Xiaomi",
+                model: "Mi 11 Ultra",
+                price: "79 990 ₽",
+                features: [
+                    "Экран: 6.81\" AMOLED, 120 Гц",
+                    "Процессор: Snapdragon 888",
+                    "Камера: 50 МП + 48 МП + 48 МП",
+                    "Батарея: 5000 мАч, 67 Вт",
+                    "Память: 12/256 ГБ"
+                ],
+                rating: 4.7,
+                marketUrl: "https://market.yandex.ru/product--mi-11-ultra/958119012?sku=101318772769&uniqueId=175669695&do-waremd5=fxYesThRDOBfKse2a_9iVw",
+                reviewUrl: "https://www.youtube.com/watch?v=jsZZ2xt6r7M",
+                image: "https://avatars.mds.yandex.net/get-mpic/5235334/img_id5573270470790919311.jpeg/600x800"
+            }
+        ];
+
+        // Функция для отображения звезд рейтинга
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            let starsHtml = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    starsHtml += '<i class="fas fa-star"></i>';
+                } else if (i === fullStars + 1 && hasHalfStar) {
+                    starsHtml += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    starsHtml += '<i class="far fa-star"></i>';
+                }
+            }
+            
+            return starsHtml;
+        }
+
+        // Функция для отображения карточек
+        function renderPhones(phonesToRender) {
+            const container = document.getElementById('phones-container');
+            container.innerHTML = '';
+            
+            if (phonesToRender.length === 0) {
+                container.innerHTML = '<div class="no-results">Ничего не найдено. Попробуйте изменить поисковый запрос.</div>';
+                return;
+            }
+            
+            phonesToRender.forEach(phone => {
+                const card = document.createElement('div');
+                card.className = 'phone-card';
+                
+                card.innerHTML = `
+                    <div class="phone-image" onclick="window.open('${phone.marketUrl}', '_blank')">
+                        <span class="phone-brand">${phone.brand}</span>
+                        <span class="phone-price">${phone.price}</span>
+                        <img src="${phone.image}" alt="${phone.brand} ${phone.model}" 
+                             onerror="this.onerror=null;this.parentElement.style.background='linear-gradient(45deg, #f3e5f5, #e1bee7)';this.remove()">
+                    </div>
+                    <div class="phone-content">
+                        <h3 class="phone-title">${phone.brand} ${phone.model}</h3>
+                        <ul class="phone-features">
+                            ${phone.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                        <div class="phone-rating">
+                            <div class="stars">${renderStars(phone.rating)}</div>
+                            <div class="rating-value">${phone.rating.toFixed(1)}/5.0</div>
+                        </div>
+                        <div class="phone-links">
+                            <a href="${phone.marketUrl}" class="btn btn-primary" target="_blank"><i class="fas fa-shopping-cart"></i> Купить</a>
+                            <a href="${phone.reviewUrl}" class="btn btn-secondary" target="_blank"><i class="fas fa-play"></i> Обзор</a>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Функция для поиска
+        function searchPhones(query) {
+            const lowerQuery = query.toLowerCase();
+            return phones.filter(phone => 
+                phone.brand.toLowerCase().includes(lowerQuery) || 
+                phone.model.toLowerCase().includes(lowerQuery) ||
+                phone.features.some(f => f.toLowerCase().includes(lowerQuery))
+            );
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPhones(phones);
+            
+            // Поиск при вводе
+            document.getElementById('search').addEventListener('input', (e) => {
+                const results = searchPhones(e.target.value);
+                renderPhones(results);
+            });
+        });
+
+        // Анимация при скролле
+        const animateOnScroll = () => {
+            const cards = document.querySelectorAll('.phone-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardTop < windowHeight - 100) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll(); // Запустить при загрузке
+    </script>
+</body>
+</html>
